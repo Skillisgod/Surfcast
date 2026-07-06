@@ -12,6 +12,8 @@ export const SURF_SPOTS: SurfSpot[] = [
     optimalWindDirection: 100,  // Vent d'est/ESE = offshore
     description: 'Célèbre beach break, une des meilleures vagues de France. Tubes puissants.',
     candhisStation: '40802',
+    webcamUrl: 'https://viewsurf.com/univers/surf/vue/2058-france-aquitaine-soorts-hossegor-plage',
+    webcamEmbedUrl: 'https://pv.viewsurf.com/2646/Hossegor',
   },
   {
     id: 'capbreton',
@@ -24,6 +26,8 @@ export const SURF_SPOTS: SurfSpot[] = [
     optimalWindDirection: 90,   // Vent d'est = offshore
     description: 'Beach break protégé par le gouf de Capbreton, filtre les grosses houles.',
     candhisStation: '40802',
+    webcamUrl: 'https://viewsurf.com/univers/plage/vue/3362-france-aquitaine-capbreton-entree-du-port',
+    webcamEmbedUrl: 'https://pv.viewsurf.com/2534/Capbreton-Santocha',
   },
   {
     id: 'biarritz',
@@ -36,6 +40,8 @@ export const SURF_SPOTS: SurfSpot[] = [
     optimalWindDirection: 110,  // SE = offshore
     description: 'Vague emblématique, idéale pour tous niveaux. Ville surf emblématique.',
     candhisStation: '02911',
+    webcamUrl: 'https://viewsurf.com/univers/surf/vue/13894-france-aquitaine-biarritz-grande-plage',
+    webcamEmbedUrl: 'https://pv.viewsurf.com/772/Biarritz-Grande-Plage',
   },
   {
     id: 'lacanau',
@@ -48,6 +54,7 @@ export const SURF_SPOTS: SurfSpot[] = [
     optimalWindDirection: 90,
     description: 'Beach break classique, accueille le Lacanau Pro chaque année.',
     candhisStation: '33801',
+    webcamUrl: 'https://viewsurf.com/univers/surf/vue/656-france-aquitaine-lacanau-plage-centrale',
   },
   {
     id: 'mimizan',
@@ -60,6 +67,8 @@ export const SURF_SPOTS: SurfSpot[] = [
     optimalWindDirection: 95,   // E/ESE = offshore
     description: 'Beach break landais, moins fréquenté qu\'Hossegor, qualité similaire.',
     candhisStation: '40802',
+    webcamUrl: 'https://viewsurf.com/univers/surf/vue/726-france-aquitaine-mimizan-panoramique-hd',
+    webcamEmbedUrl: 'https://pv.viewsurf.com/2598/Mimizan-Plage-remember',
   },
   {
     id: 'quiberon',
@@ -84,6 +93,8 @@ export const SURF_SPOTS: SurfSpot[] = [
     optimalWindDirection: 105,
     description: 'Puissant beach break entre Hossegor et Capbreton.',
     candhisStation: '40802',
+    webcamUrl: 'https://viewsurf.com/univers/surf/vue/14376-france-aquitaine-seignosse-les-bourdaines',
+    webcamEmbedUrl: 'https://pv.viewsurf.com/1244/Seignosse-Les-Bourdaines',
   },
 ];
 

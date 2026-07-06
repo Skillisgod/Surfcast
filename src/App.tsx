@@ -7,6 +7,7 @@ import { SpotSelector }      from './components/SpotSelector';
 import { CurrentConditions } from './components/CurrentConditions';
 import { ForecastChart }     from './components/ForecastChart';
 import { ForecastDays }      from './components/ForecastDays';
+import { WebcamCard }        from './components/WebcamCard';
 
 export default function App() {
   const [spot, setSpot]             = useState<SurfSpot>(SURF_SPOTS[0]);
@@ -86,6 +87,7 @@ export default function App() {
         {conditions && !loading && (
           <>
             <CurrentConditions conditions={conditions} spot={spot} />
+            <WebcamCard        spot={spot} />
             <ForecastDays      conditions={conditions} spot={spot} />
             <ForecastChart     conditions={conditions} spot={spot} />
           </>

@@ -15,6 +15,10 @@ export interface SurfSpot {
   description: string;
   /** ID station CANDHIS la plus proche */
   candhisStation?: string;
+  /** URL webcam ViewSurf en direct pour ce spot (lien "voir en direct") */
+  webcamUrl?: string;
+  /** URL du lecteur ViewSurf embarquable en iframe (pv.viewsurf.com), quand disponible */
+  webcamEmbedUrl?: string;
 }
 
 export interface MarineConditions {
