@@ -17,8 +17,13 @@ export interface SurfSpot {
   candhisStation?: string;
   /** URL webcam ViewSurf en direct pour ce spot (lien "voir en direct") */
   webcamUrl?: string;
-  /** URL du lecteur ViewSurf embarquable en iframe (pv.viewsurf.com), quand disponible */
-  webcamEmbedUrl?: string;
+  /** Flux webcam ViewSurf embarquables en iframe (pv.viewsurf.com), un ou plusieurs angles */
+  webcams?: WebcamFeed[];
+}
+
+export interface WebcamFeed {
+  label: string;
+  embedUrl: string;
 }
 
 export interface MarineConditions {

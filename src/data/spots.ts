@@ -2,6 +2,23 @@ import type { SurfSpot } from '../types/surf';
 
 export const SURF_SPOTS: SurfSpot[] = [
   {
+    id: 'mimizan',
+    name: 'Mimizan',
+    location: 'Landes (40)',
+    lat: 44.212,
+    lng: -1.280,
+    optimalSwellDirection: 285, // WNW
+    optimalSwellWindow: 55,
+    optimalWindDirection: 95,   // E/ESE = offshore
+    description: 'Beach break landais, moins fréquenté qu\'Hossegor, qualité similaire.',
+    candhisStation: '40802',
+    webcamUrl: 'https://viewsurf.com/univers/surf/vue/726-france-aquitaine-mimizan-panoramique-hd',
+    webcams: [
+      { label: 'Plage Nord',  embedUrl: 'https://pv.viewsurf.com/2598/Mimizan-Plage-remember?i=ODcyODo' },
+      { label: 'Plage Ouest', embedUrl: 'https://pv.viewsurf.com/2598/Mimizan-Plage-remember?i=ODczMDo' },
+    ],
+  },
+  {
     id: 'hossegor',
     name: 'Hossegor',
     location: 'Landes (40)',
@@ -13,7 +30,7 @@ export const SURF_SPOTS: SurfSpot[] = [
     description: 'Célèbre beach break, une des meilleures vagues de France. Tubes puissants.',
     candhisStation: '40802',
     webcamUrl: 'https://viewsurf.com/univers/surf/vue/2058-france-aquitaine-soorts-hossegor-plage',
-    webcamEmbedUrl: 'https://pv.viewsurf.com/2646/Hossegor',
+    webcams: [{ label: 'Hossegor', embedUrl: 'https://pv.viewsurf.com/2646/Hossegor' }],
   },
   {
     id: 'capbreton',
@@ -27,7 +44,7 @@ export const SURF_SPOTS: SurfSpot[] = [
     description: 'Beach break protégé par le gouf de Capbreton, filtre les grosses houles.',
     candhisStation: '40802',
     webcamUrl: 'https://viewsurf.com/univers/plage/vue/3362-france-aquitaine-capbreton-entree-du-port',
-    webcamEmbedUrl: 'https://pv.viewsurf.com/2534/Capbreton-Santocha',
+    webcams: [{ label: 'Santocha', embedUrl: 'https://pv.viewsurf.com/2534/Capbreton-Santocha' }],
   },
   {
     id: 'biarritz',
@@ -41,7 +58,7 @@ export const SURF_SPOTS: SurfSpot[] = [
     description: 'Vague emblématique, idéale pour tous niveaux. Ville surf emblématique.',
     candhisStation: '02911',
     webcamUrl: 'https://viewsurf.com/univers/surf/vue/13894-france-aquitaine-biarritz-grande-plage',
-    webcamEmbedUrl: 'https://pv.viewsurf.com/772/Biarritz-Grande-Plage',
+    webcams: [{ label: 'Grande Plage', embedUrl: 'https://pv.viewsurf.com/772/Biarritz-Grande-Plage' }],
   },
   {
     id: 'lacanau',
@@ -55,20 +72,6 @@ export const SURF_SPOTS: SurfSpot[] = [
     description: 'Beach break classique, accueille le Lacanau Pro chaque année.',
     candhisStation: '33801',
     webcamUrl: 'https://viewsurf.com/univers/surf/vue/656-france-aquitaine-lacanau-plage-centrale',
-  },
-  {
-    id: 'mimizan',
-    name: 'Mimizan',
-    location: 'Landes (40)',
-    lat: 44.212,
-    lng: -1.280,
-    optimalSwellDirection: 285, // WNW
-    optimalSwellWindow: 55,
-    optimalWindDirection: 95,   // E/ESE = offshore
-    description: 'Beach break landais, moins fréquenté qu\'Hossegor, qualité similaire.',
-    candhisStation: '40802',
-    webcamUrl: 'https://viewsurf.com/univers/surf/vue/726-france-aquitaine-mimizan-panoramique-hd',
-    webcamEmbedUrl: 'https://pv.viewsurf.com/2598/Mimizan-Plage-remember',
   },
   {
     id: 'quiberon',
@@ -94,7 +97,7 @@ export const SURF_SPOTS: SurfSpot[] = [
     description: 'Puissant beach break entre Hossegor et Capbreton.',
     candhisStation: '40802',
     webcamUrl: 'https://viewsurf.com/univers/surf/vue/14376-france-aquitaine-seignosse-les-bourdaines',
-    webcamEmbedUrl: 'https://pv.viewsurf.com/1244/Seignosse-Les-Bourdaines',
+    webcams: [{ label: 'Les Bourdaines', embedUrl: 'https://pv.viewsurf.com/1244/Seignosse-Les-Bourdaines' }],
   },
 ];
 
