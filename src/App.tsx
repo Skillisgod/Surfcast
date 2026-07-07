@@ -3,11 +3,14 @@ import { Waves, RefreshCw } from 'lucide-react';
 import { SURF_SPOTS } from './data/spots';
 import type { SurfSpot, MarineConditions } from './types/surf';
 import { fetchMarineConditions } from './services/openMeteo';
+import { useFavorites } from './hooks/useFavorites';
 import { SpotSelector }      from './components/SpotSelector';
+import { SpotSearch }        from './components/SpotSearch';
 import { CurrentConditions } from './components/CurrentConditions';
 import { ForecastChart }     from './components/ForecastChart';
 import { ForecastDays }      from './components/ForecastDays';
 import { WebcamCard }        from './components/WebcamCard';
+import { TideCard }          from './components/TideCard';
 
 export default function App() {
   const [spot, setSpot]             = useState<SurfSpot>(SURF_SPOTS[0]);
@@ -15,6 +18,9 @@ export default function App() {
   const [loading, setLoading]       = useState(true);
   const [error, setError]           = useState<string | null>(null);
   const [lastFetch, setLastFetch]   = useState<Date | null>(null);
+  const [searchOpen, setSearchOpen] = useState(false);
+
+  const { favorites, isFavorite, toggleFavorite } = useFavorites();
 
   const load = useCallback((s: SurfSpot) => {
     setLoading(true);
@@ -58,7 +64,20 @@ export default function App() {
 
       {/* ── Contenu ── */}
       <main className="max-w-2xl mx-auto px-3 sm:px-4 py-4 space-y-4">
-        <SpotSelector spots={SURF_SPOTS} selected={spot} onSelect={setSpot} />
+        <SpotSelector
+          spots={favorites}
+          selected={spot}
+          onSelect={s => { setSpot(s); setSearchOpen(false); }}
+          onSearchClick={() => setSearchOpen(o => !o)}
+          searchActive={searchOpen}
+        />
+
+        {searchOpen && (
+          <SpotSearch
+            onSelect={s => { setSpot(s); setSearchOpen(false); }}
+            onClose={() => setSearchOpen(false)}
+          />
+        )}
 
         {/* Chargement */}
         {loading && (
@@ -86,7 +105,13 @@ export default function App() {
         {/* Données */}
         {conditions && !loading && (
           <>
-            <CurrentConditions conditions={conditions} spot={spot} />
+            <CurrentConditions
+              conditions={conditions}
+              spot={spot}
+              isFavorite={isFavorite(spot.id)}
+              onToggleFavorite={() => toggleFavorite(spot)}
+            />
+            <TideCard          spot={spot} />
             <WebcamCard        spot={spot} />
             <ForecastDays      conditions={conditions} spot={spot} />
             <ForecastChart     conditions={conditions} spot={spot} />

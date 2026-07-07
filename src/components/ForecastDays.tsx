@@ -128,15 +128,6 @@ function scoreBadgeClasses(s: number): string {
   return              'bg-gray-300    text-gray-600';
 }
 
-function scoreEmoji(s: number): string {
-  if (s >= 80) return '🔥';
-  if (s >= 65) return '✅';
-  if (s >= 50) return '👍';
-  if (s >= 35) return '⚠️';
-  if (s >= 18) return '👎';
-  return '😴';
-}
-
 function scoreTextClass(s: number): string {
   if (s >= 80) return 'text-emerald-600';
   if (s >= 65) return 'text-green-600';
@@ -149,9 +140,8 @@ function scoreTextClass(s: number): string {
 /** Gros badge score, rond et coloré — c'est le point d'accroche de chaque ligne */
 function ScoreBadge({ score }: { score: number }) {
   return (
-    <div className={`w-12 h-12 rounded-2xl flex flex-col items-center justify-center flex-shrink-0 ${scoreBadgeClasses(score)}`}>
+    <div className={`w-12 h-12 rounded-2xl flex items-center justify-center flex-shrink-0 ${scoreBadgeClasses(score)}`}>
       <span className="text-lg font-black leading-none">{score}</span>
-      <span className="text-[10px] leading-none mt-0.5">{scoreEmoji(score)}</span>
     </div>
   );
 }

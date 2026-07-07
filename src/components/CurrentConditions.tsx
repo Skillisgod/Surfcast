@@ -1,5 +1,6 @@
 import React from 'react';
 import dayjs from 'dayjs';
+import { Star } from 'lucide-react';
 import type { MarineConditions, SurfSpot } from '../types/surf';
 import { calculateSurfScore, directionLabel } from '../services/surfScore';
 import type { SurfScore } from '../services/surfScore';
@@ -7,6 +8,8 @@ import type { SurfScore } from '../services/surfScore';
 interface Props {
   conditions: MarineConditions;
   spot: SurfSpot;
+  isFavorite: boolean;
+  onToggleFavorite: () => void;
 }
 
 function safeNum(v: number | null | undefined, fallback = 0): number {
@@ -70,7 +73,7 @@ function MetricCell({ label, value, unit, sub, color }: CellProps) {
   );
 }
 
-export function CurrentConditions({ conditions, spot }: Props) {
+export function CurrentConditions({ conditions, spot, isFavorite, onToggleFavorite }: Props) {
   const idx = currentIndex(conditions.time);
 
   const waveHeight  = safeNum(conditions.waveHeight[idx]);
@@ -79,10 +82,10 @@ export function CurrentConditions({ conditions, spot }: Props) {
   const swellHeight = safeNum(conditions.swellWaveHeight[idx]);
   const swellPeriod = safeNum(conditions.swellWavePeriod[idx]);
   const swellDir    = safeNum(conditions.swellWaveDirection[idx], waveDir);
-  const windWaveH   = safeNum(conditions.windWaveHeight[idx]);
   const windSpeed   = safeNum(conditions.windSpeed[idx]);
   const windDir     = safeNum(conditions.windDirection[idx]);
   const windGusts   = safeNum(conditions.windGusts[idx]);
+  const seaTemp     = safeNum(conditions.seaSurfaceTemperature[idx]);
 
   const period    = swellPeriod || wavePeriod;
   const direction = swellDir || waveDir;
@@ -106,13 +109,22 @@ export function CurrentConditions({ conditions, spot }: Props) {
               <span className="text-gray-300 text-2xl font-light self-end mb-1">/100</span>
             </div>
             <p className={`text-lg font-bold mt-1 ${textCls}`}>
-              {score.emoji} {score.label}
+              {score.label}
             </p>
           </div>
 
           {/* Infos spot */}
           <div className="text-right pt-1">
-            <p className="text-gray-800 font-bold text-base leading-tight">{spot.name}</p>
+            <div className="flex items-center justify-end gap-1.5">
+              <p className="text-gray-800 font-bold text-base leading-tight">{spot.name}</p>
+              <button
+                onClick={onToggleFavorite}
+                aria-label={isFavorite ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+                className="p-0.5 -m-0.5 active:scale-90 transition-transform"
+              >
+                <Star className={`w-[18px] h-[18px] ${isFavorite ? 'fill-amber-400 text-amber-400' : 'text-gray-300'}`} />
+              </button>
+            </div>
             <p className="text-gray-500 text-sm">{spot.location}</p>
             <p className="text-gray-400 text-xs mt-1.5">
               {dayjs(conditions.time[idx]).format('ddd DD/MM · HH:mm')}
@@ -149,7 +161,7 @@ export function CurrentConditions({ conditions, spot }: Props) {
           color="text-sky-600"
         />
         <MetricCell
-          label="Tp"
+          label="Période"
           value={period.toFixed(0)}
           unit="s"
           sub={`Swell ${swellHeight.toFixed(1)} m`}
@@ -175,10 +187,9 @@ export function CurrentConditions({ conditions, spot }: Props) {
           color="text-orange-500"
         />
         <MetricCell
-          label="Clapot"
-          value={windWaveH.toFixed(1)}
-          unit="m"
-          sub={`${wavePeriod.toFixed(0)} s`}
+          label="Temp. mer"
+          value={seaTemp.toFixed(1)}
+          unit="°C"
           color="text-teal-600"
         />
       </div>

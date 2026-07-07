@@ -17,6 +17,7 @@ export const SURF_SPOTS: SurfSpot[] = [
       { label: 'Plage Nord',  embedUrl: 'https://pv.viewsurf.com/2598/Mimizan-Plage-remember?i=ODcyODo' },
       { label: 'Plage Ouest', embedUrl: 'https://pv.viewsurf.com/2598/Mimizan-Plage-remember?i=ODczMDo' },
     ],
+    tideSite: 'mimizan',
   },
   {
     id: 'hossegor',
@@ -31,6 +32,7 @@ export const SURF_SPOTS: SurfSpot[] = [
     candhisStation: '40802',
     webcamUrl: 'https://viewsurf.com/univers/surf/vue/2058-france-aquitaine-soorts-hossegor-plage',
     webcams: [{ label: 'Hossegor', embedUrl: 'https://pv.viewsurf.com/2646/Hossegor' }],
+    tideSite: 'vieux-boucau',
   },
   {
     id: 'capbreton',
@@ -45,6 +47,7 @@ export const SURF_SPOTS: SurfSpot[] = [
     candhisStation: '40802',
     webcamUrl: 'https://viewsurf.com/univers/plage/vue/3362-france-aquitaine-capbreton-entree-du-port',
     webcams: [{ label: 'Santocha', embedUrl: 'https://pv.viewsurf.com/2534/Capbreton-Santocha' }],
+    tideSite: 'boucau-bayonne-biarritz',
   },
   {
     id: 'biarritz',
@@ -59,6 +62,7 @@ export const SURF_SPOTS: SurfSpot[] = [
     candhisStation: '02911',
     webcamUrl: 'https://viewsurf.com/univers/surf/vue/13894-france-aquitaine-biarritz-grande-plage',
     webcams: [{ label: 'Grande Plage', embedUrl: 'https://pv.viewsurf.com/772/Biarritz-Grande-Plage' }],
+    tideSite: 'boucau-bayonne-biarritz',
   },
   {
     id: 'lacanau',
@@ -72,6 +76,8 @@ export const SURF_SPOTS: SurfSpot[] = [
     description: 'Beach break classique, accueille le Lacanau Pro chaque année.',
     candhisStation: '33801',
     webcamUrl: 'https://viewsurf.com/univers/surf/vue/656-france-aquitaine-lacanau-plage-centrale',
+    webcams: [{ label: 'Plage Centrale', embedUrl: 'https://pv.viewsurf.com/410/Lacanau-Plage-Nord-Surf-club' }],
+    tideSite: 'lacanau-large',
   },
   {
     id: 'quiberon',
@@ -84,6 +90,7 @@ export const SURF_SPOTS: SurfSpot[] = [
     optimalWindDirection: 70,   // ENE = offshore
     description: 'Bretagne sud, spot venteux et puissant, souvent fermé en gros.',
     candhisStation: '56401',
+    tideSite: 'quiberon-port-maria',
   },
   {
     id: 'seignosse',
@@ -98,6 +105,7 @@ export const SURF_SPOTS: SurfSpot[] = [
     candhisStation: '40802',
     webcamUrl: 'https://viewsurf.com/univers/surf/vue/14376-france-aquitaine-seignosse-les-bourdaines',
     webcams: [{ label: 'Les Bourdaines', embedUrl: 'https://pv.viewsurf.com/1244/Seignosse-Les-Bourdaines' }],
+    tideSite: 'vieux-boucau',
   },
 ];
 

@@ -19,6 +19,8 @@ export interface SurfSpot {
   webcamUrl?: string;
   /** Flux webcam ViewSurf embarquables en iframe (pv.viewsurf.com), un ou plusieurs angles */
   webcams?: WebcamFeed[];
+  /** Slug du port de référence api-maree.fr le plus proche, pour les marées */
+  tideSite?: string;
 }
 
 export interface WebcamFeed {
@@ -38,6 +40,7 @@ export interface MarineConditions {
   windSpeed: (number | null)[];
   windDirection: (number | null)[];
   windGusts: (number | null)[];
+  seaSurfaceTemperature: (number | null)[];
 }
 
 export interface BuoyMeasurement {

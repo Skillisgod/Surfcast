@@ -25,6 +25,7 @@ export async function fetchMarineConditions(lat: number, lng: number): Promise<M
       'wind_wave_height',
       'wind_wave_direction',
       'wind_wave_period',
+      'sea_surface_temperature',
     ].join(','),
     timezone:      'Europe/Paris',
     forecast_days: '7',
@@ -62,6 +63,7 @@ export async function fetchMarineConditions(lat: number, lng: number): Promise<M
     windSpeed:         weather.hourly.wind_speed_10m,
     windDirection:     weather.hourly.wind_direction_10m,
     windGusts:         weather.hourly.wind_gusts_10m,
+    seaSurfaceTemperature: marine.hourly.sea_surface_temperature,
   };
 }
 
@@ -81,6 +83,7 @@ interface OpenMeteoMarineResponse {
     wind_wave_height:      (number | null)[];
     wind_wave_direction:   (number | null)[];
     wind_wave_period:      (number | null)[];
+    sea_surface_temperature: (number | null)[];
   };
 }
 
