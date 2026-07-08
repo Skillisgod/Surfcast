@@ -1,36 +1,14 @@
-import { useEffect, useState } from 'react';
 import { ArrowUp, ArrowDown } from 'lucide-react';
-import type { SurfSpot } from '../types/surf';
-import { fetchTideLevels } from '../services/tides';
 import { TideChart, getNowStatus } from './TideChart';
 import type { TidePoint } from './TideChart';
 
 interface Props {
-  spot: SurfSpot;
+  points: TidePoint[];
+  loading: boolean;
+  error: boolean;
 }
 
-export function TideCard({ spot }: Props) {
-  const [points, setPoints]   = useState<TidePoint[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [error, setError]     = useState(false);
-
-  useEffect(() => {
-    setPoints([]);
-    setError(false);
-    if (!spot.tideSite) return;
-
-    let cancelled = false;
-    setLoading(true);
-    fetchTideLevels(spot.tideSite)
-      .then(data => { if (!cancelled) setPoints(data); })
-      .catch(() => { if (!cancelled) setError(true); })
-      .finally(() => { if (!cancelled) setLoading(false); });
-
-    return () => { cancelled = true; };
-  }, [spot.tideSite]);
-
-  if (!spot.tideSite) return null;
-
+export function TideCard({ points, loading, error }: Props) {
   const now = points.length > 0 ? getNowStatus(points) : null;
 
   return (

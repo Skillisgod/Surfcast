@@ -45,14 +45,22 @@ export function getNowStatus(points: TidePoint[]): NowStatus | null {
   };
 }
 
+/**
+ * Détecte un changement de tendance plutôt qu'un simple "plus grand que ses voisins" :
+ * au sommet d'une marée, deux points consécutifs partagent souvent la même hauteur
+ * (plateau d'arrondi), ce qui ferait échouer une comparaison stricte cur > next.
+ */
 function findExtrema(points: TidePoint[]): Extremum[] {
   const extrema: Extremum[] = [];
-  for (let i = 1; i < points.length - 1; i++) {
-    const prev = points[i - 1].height;
-    const cur  = points[i].height;
-    const next = points[i + 1].height;
-    if (cur > prev && cur > next) extrema.push({ index: i, kind: 'peak' });
-    else if (cur < prev && cur < next) extrema.push({ index: i, kind: 'trough' });
+  let trend = 0; // -1 descend, 1 monte, 0 indéterminé (plateau initial)
+  for (let i = 1; i < points.length; i++) {
+    const diff = points[i].height - points[i - 1].height;
+    if (diff === 0) continue; // plateau : on garde la tendance en cours
+    const dir = diff > 0 ? 1 : -1;
+    if (trend !== 0 && dir !== trend) {
+      extrema.push({ index: i - 1, kind: trend === 1 ? 'peak' : 'trough' });
+    }
+    trend = dir;
   }
   return extrema;
 }

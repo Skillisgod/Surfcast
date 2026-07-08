@@ -3,6 +3,8 @@ import { Waves, RefreshCw } from 'lucide-react';
 import { SURF_SPOTS } from './data/spots';
 import type { SurfSpot, MarineConditions } from './types/surf';
 import { fetchMarineConditions } from './services/openMeteo';
+import { fetchTideLevels } from './services/tides';
+import type { TidePoint } from './components/TideChart';
 import { useFavorites } from './hooks/useFavorites';
 import { SpotSelector }      from './components/SpotSelector';
 import { SpotSearch }        from './components/SpotSearch';
@@ -12,6 +14,9 @@ import { ForecastDays }      from './components/ForecastDays';
 import { WebcamCard }        from './components/WebcamCard';
 import { TideCard }          from './components/TideCard';
 
+/** Bloc "Prévisions 5 jours" mis de côté pour l'instant — pas supprimé, juste masqué */
+const SHOW_FORECAST_CHART = false;
+
 export default function App() {
   const [spot, setSpot]             = useState<SurfSpot>(SURF_SPOTS[0]);
   const [conditions, setConditions] = useState<MarineConditions | null>(null);
@@ -19,6 +24,10 @@ export default function App() {
   const [error, setError]           = useState<string | null>(null);
   const [lastFetch, setLastFetch]   = useState<Date | null>(null);
   const [searchOpen, setSearchOpen] = useState(false);
+
+  const [tidePoints, setTidePoints]   = useState<TidePoint[]>([]);
+  const [tideLoading, setTideLoading] = useState(false);
+  const [tideError, setTideError]     = useState(false);
 
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
 
@@ -33,6 +42,21 @@ export default function App() {
   }, []);
 
   useEffect(() => { load(spot); }, [spot, load]);
+
+  useEffect(() => {
+    setTidePoints([]);
+    setTideError(false);
+    if (!spot.tideSite) return;
+
+    let cancelled = false;
+    setTideLoading(true);
+    fetchTideLevels(spot.tideSite, 7)
+      .then(data => { if (!cancelled) setTidePoints(data); })
+      .catch(() => { if (!cancelled) setTideError(true); })
+      .finally(() => { if (!cancelled) setTideLoading(false); });
+
+    return () => { cancelled = true; };
+  }, [spot.tideSite]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -111,10 +135,12 @@ export default function App() {
               isFavorite={isFavorite(spot.id)}
               onToggleFavorite={() => toggleFavorite(spot)}
             />
-            <TideCard          spot={spot} />
+            {spot.tideSite && (
+              <TideCard points={tidePoints} loading={tideLoading} error={tideError} />
+            )}
             <WebcamCard        spot={spot} />
-            <ForecastDays      conditions={conditions} spot={spot} />
-            <ForecastChart     conditions={conditions} spot={spot} />
+            <ForecastDays      conditions={conditions} spot={spot} tidePoints={tidePoints} />
+            {SHOW_FORECAST_CHART && <ForecastChart conditions={conditions} spot={spot} />}
           </>
         )}
       </main>

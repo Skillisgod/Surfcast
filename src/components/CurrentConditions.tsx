@@ -2,7 +2,7 @@ import React from 'react';
 import dayjs from 'dayjs';
 import { Star } from 'lucide-react';
 import type { MarineConditions, SurfSpot } from '../types/surf';
-import { calculateSurfScore, directionLabel } from '../services/surfScore';
+import { calculateSurfScore, directionLabel, swellEnergyKw, swellEnergyLabel } from '../services/surfScore';
 import type { SurfScore } from '../services/surfScore';
 
 interface Props {
@@ -89,7 +89,8 @@ export function CurrentConditions({ conditions, spot, isFavorite, onToggleFavori
 
   const period    = swellPeriod || wavePeriod;
   const direction = swellDir || waveDir;
-  const score = calculateSurfScore(waveHeight, period, windSpeed, windDir, direction, spot, swellHeight);
+  const score  = calculateSurfScore(waveHeight, period, windSpeed, windDir, direction, spot, swellHeight);
+  const energy = swellEnergyKw(swellHeight || waveHeight, period);
 
   const textCls = scoreTextClass(score);
 
@@ -127,7 +128,7 @@ export function CurrentConditions({ conditions, spot, isFavorite, onToggleFavori
             </div>
             <p className="text-gray-500 text-sm">{spot.location}</p>
             <p className="text-gray-400 text-xs mt-1.5">
-              {dayjs(conditions.time[idx]).format('ddd DD/MM · HH:mm')}
+              {dayjs(conditions.time[idx]).format('ddd DD/MM · HH:mm')} · Mer {seaTemp.toFixed(1)}°C
             </p>
           </div>
         </div>
@@ -154,7 +155,7 @@ export function CurrentConditions({ conditions, spot, isFavorite, onToggleFavori
       {/* ── Grille métriques (gap-px = lignes grises) ── */}
       <div className="grid grid-cols-3 gap-px bg-gray-100">
         <MetricCell
-          label="Hm0"
+          label="Houle"
           value={waveHeight.toFixed(1)}
           unit="m"
           sub={`Hmax ~${(waveHeight * 1.6).toFixed(1)} m`}
@@ -187,9 +188,10 @@ export function CurrentConditions({ conditions, spot, isFavorite, onToggleFavori
           color="text-orange-500"
         />
         <MetricCell
-          label="Temp. mer"
-          value={seaTemp.toFixed(1)}
-          unit="°C"
+          label="Énergie houle"
+          value={energy.toFixed(0)}
+          unit="kW/m"
+          sub={swellEnergyLabel(energy)}
           color="text-teal-600"
         />
       </div>

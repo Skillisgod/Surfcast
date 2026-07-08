@@ -90,6 +90,20 @@ export function scoreCleanliness(swellHeight: number, totalHeight: number): numb
   return 0;
 }
 
+/** Énergie de la houle (kW/m), approximation eau profonde : P ≈ 0.5 × Hs² × T */
+export function swellEnergyKw(heightM: number, periodS: number): number {
+  return 0.5 * heightM ** 2 * periodS;
+}
+
+/** Traduction en langage clair de l'énergie de houle, pour les non-initiés */
+export function swellEnergyLabel(kw: number): string {
+  if (kw < 2)  return 'Faible';
+  if (kw < 8)  return 'Modérée';
+  if (kw < 20) return 'Forte';
+  if (kw < 40) return 'Très forte';
+  return 'Énorme';
+}
+
 // ---------------------------------------------------------------------------
 // Score global
 // ---------------------------------------------------------------------------

@@ -1,13 +1,21 @@
 import { useState } from 'react';
 import dayjs from 'dayjs';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, ArrowUp, ArrowDown } from 'lucide-react';
 import type { MarineConditions, SurfSpot } from '../types/surf';
 import { calculateSurfScore } from '../services/surfScore';
+import { groupTideExtremaByDay } from '../services/tides';
+import type { TideExtremum } from '../services/tides';
+import type { TidePoint } from './TideChart';
 
 interface Props {
   conditions: MarineConditions;
   spot: SurfSpot;
+  tidePoints: TidePoint[];
 }
+
+/** Personne ne surfe en pleine nuit : le "meilleur score" du jour ne regarde que ce créneau */
+const SURF_WINDOW_START_HOUR = 6;
+const SURF_WINDOW_END_HOUR   = 21;
 
 function safeNum(v: number | null | undefined, f = 0): number {
   return v ?? f;
@@ -45,9 +53,14 @@ interface DaySummary {
   bestScore: number;
   bestHour: string;
   hours: HourRow[];
+  tides: TideExtremum[];
 }
 
-function buildDays(conditions: MarineConditions, spot: SurfSpot): DaySummary[] {
+function buildDays(
+  conditions: MarineConditions,
+  spot: SurfSpot,
+  tideByDay: Record<string, TideExtremum[]>,
+): DaySummary[] {
   const now = dayjs();
   const grouped: Record<string, number[]> = {};
 
@@ -83,7 +96,13 @@ function buildDays(conditions: MarineConditions, spot: SurfSpot): DaySummary[] {
       };
     });
 
-    const scores  = hours.map(h => h.score);
+    // Le "meilleur score" ne regarde que le créneau où on irait vraiment surfer
+    const surfableHours = hours.filter(h => {
+      const hh = dayjs(h.time).hour();
+      return hh >= SURF_WINDOW_START_HOUR && hh <= SURF_WINDOW_END_HOUR;
+    });
+    const scoringPool = surfableHours.length ? surfableHours : hours;
+    const scores    = scoringPool.map(h => h.score);
     const bestScore = scores.length ? Math.max(...scores) : 0;
     const bestIdx   = scores.indexOf(bestScore);
     const mid = Math.floor(hours.length / 2);
@@ -98,8 +117,9 @@ function buildDays(conditions: MarineConditions, spot: SurfSpot): DaySummary[] {
       avgWind:         avg(hours.map(h => h.windSpeed)),
       dominantWindDir: hours[mid]?.windDir ?? 0,
       bestScore,
-      bestHour:        hours[bestIdx]?.hour ?? '--:--',
+      bestHour:        scoringPool[bestIdx]?.hour ?? '--:--',
       hours,
+      tides: tideByDay[date] ?? [],
     };
   });
 }
@@ -107,6 +127,11 @@ function buildDays(conditions: MarineConditions, spot: SurfSpot): DaySummary[] {
 // ---------------------------------------------------------------------------
 // Helpers visuels — tout doit se lire d'un coup d'œil, sans décoder du texte
 // ---------------------------------------------------------------------------
+
+/** Petit séparateur entre les métriques d'une ligne dense */
+function Dot() {
+  return <span className="w-1 h-1 rounded-full bg-gray-300 flex-shrink-0" aria-hidden="true" />;
+}
 
 /** Flèche qui pointe où va la houle/le vent (rotation = direction + 180°) */
 function DirArrow({ degrees, className }: { degrees: number; className?: string }) {
@@ -150,8 +175,9 @@ function ScoreBadge({ score }: { score: number }) {
 // Composant principal
 // ---------------------------------------------------------------------------
 
-export function ForecastDays({ conditions, spot }: Props) {
-  const days = buildDays(conditions, spot);
+export function ForecastDays({ conditions, spot, tidePoints }: Props) {
+  const tideByDay = groupTideExtremaByDay(tidePoints);
+  const days = buildDays(conditions, spot, tideByDay);
   // Aujourd'hui ouvert par défaut
   const [openDay, setOpenDay] = useState<string | null>(days[0]?.date ?? null);
 
@@ -186,16 +212,34 @@ export function ForecastDays({ conditions, spot }: Props) {
                   <p className="text-gray-800 font-bold text-sm capitalize leading-tight">
                     {day.label} <span className="text-gray-400 font-normal text-xs">⭐ {day.bestHour}</span>
                   </p>
-                  <div className="flex items-center gap-3 mt-1 text-sm font-semibold flex-wrap">
-                    <span className="flex items-center gap-1 text-sky-600 whitespace-nowrap">
+                  <div className="flex items-center gap-2 gap-y-1 mt-1 text-xs font-semibold flex-wrap">
+                    <span className="flex items-center gap-1 text-sky-600 flex-shrink-0">
                       🌊 {day.minWave.toFixed(1)}–{day.maxWave.toFixed(1)}m
                     </span>
-                    <span className="flex items-center gap-1 text-violet-600">
+                    <Dot />
+                    <span className="flex items-center gap-1 text-violet-600 flex-shrink-0">
                       <DirArrow degrees={day.dominantDir} /> {day.avgPeriod.toFixed(0)}s
                     </span>
-                    <span className="flex items-center gap-1 text-amber-500 whitespace-nowrap">
+                    <Dot />
+                    <span className="flex items-center gap-1 text-amber-500 flex-shrink-0">
                       <DirArrow degrees={day.dominantWindDir} /> {day.avgWind.toFixed(0)}km/h
                     </span>
+                    {day.tides.length > 0 && (
+                      <>
+                        <Dot />
+                        <span className="flex items-center gap-1.5 flex-shrink-0">
+                          {day.tides.map((t, i) => (
+                            <span
+                              key={i}
+                              className={`flex items-center gap-0.5 ${t.kind === 'high' ? 'text-emerald-500' : 'text-rose-500'}`}
+                            >
+                              {t.kind === 'high' ? <ArrowUp className="w-3 h-3" /> : <ArrowDown className="w-3 h-3" />}
+                              {dayjs(t.time).format('HH:mm')}
+                            </span>
+                          ))}
+                        </span>
+                      </>
+                    )}
                   </div>
                 </div>
 
